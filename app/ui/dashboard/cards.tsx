@@ -5,6 +5,8 @@ import {
   InboxIcon,
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
+import { fetchCardData } from "@/app/lib/data";
+// import { use } from "react";
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -14,18 +16,27 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
+  const {
+		numberOfInvoices,
+		numberOfCustomers,
+		totalPaidInvoices,
+		totalPendingInvoices
+    } = await fetchCardData();
+  // } = use(fetchCardData()); // this would also work but Next.js recommends using it in Client Components instead
+      /* use() is a declarative async data reader:
+      - It pauses rendering when passed a Promise (via Suspense).
+      - It can read context values, similar to useContext but more flexible. */
+
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
-      {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
+      <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
       <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
       <Card
         title="Total Customers"
         value={numberOfCustomers}
         type="customers"
-      /> */}
+      />
     </>
   );
 }

@@ -13,18 +13,22 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchRevenue() {
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
+		// Artificially delay a response for demo purposes.
+		// Don't do this in production :)
 
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log('Fetching revenue data...');
+    const timeout = 3000;
+		await new Promise((resolve) => setTimeout(resolve, timeout));
 
-    const data = await sql<Revenue[]>`SELECT * FROM revenue`;
+		const data = await sql<
+			Revenue[]
+		>`SELECT * FROM revenue ORDER BY TO_DATE(MONTH, 'Mon');`;
+		// ezt a "ORDER BY TO_DATE(MONTH, 'Mon')" én adtam hozzá, mert össze-vissza voltak...
 
-    // console.log('Data fetch completed after 3 seconds.');
+		console.log(`Data fetch completed after ${timeout / 1000} seconds.`);
 
-    return data;
-  } catch (error) {
+		return data;
+	} catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data.');
   }
