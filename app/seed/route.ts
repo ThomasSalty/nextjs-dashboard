@@ -17,13 +17,24 @@ async function seedUsers() {
 
   const insertedUsers = await Promise.all(
     users.map(async (user) => {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      return sql`
+			/* When seeding your database, we're using a package called "bcrypt" to hash the user's password before storing it in the database. */
+			// Copilot:
+			//  bcrypt with 10 salt rounds is still considered secure for most applications in 2026, but 10 rounds is the lower end
+      //  of what modern security standards recommend. Many organizations now use 12–14 rounds or migrate to Argon2id,
+      //  which is generally considered the strongest option today.
+
+      // Why 10 rounds may be weak in 2026?
+      //  Security experts generally recommend:
+      //  - 12 rounds minimum for new applications
+      //  - 14+ for high‑security environments
+      // 'bcrypt' has one big weakness, it is CPU‑bound, not memory‑hard. This means GPUs can accelerate attacks significantly.
+			const hashedPassword = await bcrypt.hash(user.password, 10);
+			return sql`
         INSERT INTO users (id, name, email, password)
         VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
         ON CONFLICT (id) DO NOTHING;
       `;
-    }),
+		}),
   );
 
   return insertedUsers;

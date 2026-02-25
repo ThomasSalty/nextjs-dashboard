@@ -10,6 +10,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
 import { createInvoice, State } from "@/app/lib/actions";
+// https://react.dev/reference/react/useActionState
+//  Use useActionState for form state management and pending indicators, which is the 3rd param of the returned array
+// Copilot:
+//  No — in Next.js, server actions are usually called via <form action={...}>, not via useActionState.
+//  useActionState is an optional enhancement used when you need local UI state, loading indicators, or error feedback tied to the server action.
 import { useActionState } from "react";
 /*
   https://nextjs.org/learn/dashboard-app/improving-accessibility#server-side-validation
